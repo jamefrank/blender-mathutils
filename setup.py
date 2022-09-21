@@ -43,6 +43,7 @@ source_files = [
     "src/stubs/stubs.c",
 
     # * blenlib *
+    "src/blenlib/intern/BLI_assert.c",
     "src/blenlib/intern/math_base.c",
     "src/blenlib/intern/math_color.c",
     "src/blenlib/intern/math_geom.c",
@@ -93,9 +94,11 @@ header_files = [
     "src/blenlib/BLI_math_matrix.h",
     "src/blenlib/BLI_math_rotation.h",
     "src/blenlib/BLI_math_solvers.h",
+    "src/blenlib/BLI_math_time.h",
     "src/blenlib/BLI_math_vector.h",
     "src/blenlib/BLI_memarena.h",
     "src/blenlib/BLI_mempool.h",
+    "src/blenlib/BLI_simd.h",
     "src/blenlib/BLI_strict_flags.h",
     "src/blenlib/BLI_sys_types.h",
     "src/blenlib/BLI_system.h",
@@ -135,7 +138,7 @@ elif compiler_name == "unix":
 
 setup(
     name="mathutils",
-    version="2.81.2",
+    version="3.3.0",
     maintainer="Campbell Barton",
     maintainer_email="ideasman42@gmail.com",
     url="https://gitlab.com/ideasman42/blender-mathutils",
@@ -144,7 +147,7 @@ setup(
         "Matrix, Vector, Quaternion, Euler and Color classes, "
         "written in C for speed."
     ),
-    license="GNU GPLv2+",
+    license="GNU GPLv3+",
     ext_modules=[
         Extension(
             "mathutils",

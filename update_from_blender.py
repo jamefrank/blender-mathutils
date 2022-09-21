@@ -80,12 +80,15 @@ files_blenlib = (
     "source/blender/blenlib/BLI_math_rotation.h",
     "source/blender/blenlib/BLI_math_solvers.h",
     "source/blender/blenlib/BLI_math_statistics.h",
+    "source/blender/blenlib/BLI_math_time.h", # UNUSED (no source file).
     "source/blender/blenlib/BLI_math_vector.h",
+    "source/blender/blenlib/BLI_simd.h",  # UNUSED (no source file).
     "source/blender/blenlib/BLI_strict_flags.h",
     "source/blender/blenlib/BLI_sys_types.h",
     "source/blender/blenlib/BLI_system.h",
     "source/blender/blenlib/BLI_utildefines.h",
     "source/blender/blenlib/BLI_utildefines_variadic.h",
+    "source/blender/blenlib/intern/BLI_assert.c",
     "source/blender/blenlib/intern/math_base.c",
     "source/blender/blenlib/intern/math_base_inline.c",
     "source/blender/blenlib/intern/math_bits_inline.c",

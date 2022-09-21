@@ -102,6 +102,7 @@ set(SRC_INLINE
 
 set(SRC
 	${SRC_INLINE}
+	src/blenlib/intern/BLI_assert.c
 	src/blenlib/intern/math_base.c
 	src/blenlib/intern/math_color.c
 	src/blenlib/intern/math_geom.c
