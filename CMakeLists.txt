@@ -29,6 +29,14 @@ if(MSVC)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /J")
 endif()
 
+include(TestBigEndian)
+test_big_endian(_SYSTEM_BIG_ENDIAN)
+if(_SYSTEM_BIG_ENDIAN)
+	add_definitions(-D__BIG_ENDIAN__)
+else()
+	add_definitions(-D__LITTLE_ENDIAN__)
+endif()
+unset(_SYSTEM_BIG_ENDIAN)
 
 # -----------------------------------------------------------------------------
 # configure python

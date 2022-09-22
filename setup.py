@@ -125,6 +125,7 @@ header_files = [
 
 compiler_name = distutils.ccompiler.get_default_compiler()
 
+options = []
 if compiler_name == "msvc":
     options = ["/J"]
 elif compiler_name == "unix":
@@ -135,6 +136,10 @@ elif compiler_name == "unix":
         "-std=gnu99",
     ]
 
+if sys.byteorder == "little":
+    options += ["-D__LITTLE_ENDIAN__"]
+else:
+    options += ["-D__BIG_ENDIAN__"]
 
 setup(
     name="mathutils",
