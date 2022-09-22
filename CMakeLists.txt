@@ -229,9 +229,16 @@ target_link_libraries(mathutils_module
 # -----------------------------------------------------------------------------
 # installation
 
-install(
-	TARGETS mathutils_module
-	LIBRARY
-	DESTINATION
-		"${PYTHON_SITE_PACKAGES}"
-)
+if(WIN32)
+	install(
+		TARGETS mathutils_module
+		RUNTIME
+		DESTINATION "${PYTHON_SITE_PACKAGES}"
+	)
+else()
+	install(
+		TARGETS mathutils_module
+		LIBRARY
+		DESTINATION "${PYTHON_SITE_PACKAGES}"
+	)
+endif()
