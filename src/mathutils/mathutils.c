@@ -19,28 +19,28 @@
 #endif
 
 PyDoc_STRVAR(
-    M_Mathutils_doc,
-    "This module provides access to math operations.\n"
-    "\n"
-    ".. note::\n"
-    "\n"
-    "   Classes, methods and attributes that accept vectors also accept other numeric sequences,\n"
-    "   such as tuples, lists.\n"
-    "\n"
-    "The :mod:`mathutils` module provides the following classes:\n"
-    "\n"
-    "- :class:`Color`,\n"
-    "- :class:`Euler`,\n"
-    "- :class:`Matrix`,\n"
-    "- :class:`Quaternion`,\n"
-    "- :class:`Vector`,\n");
-static int mathutils_array_parse_fast(float *array,
-                                      int size,
-                                      PyObject *value_fast,
-                                      const char *error_prefix)
+  M_Mathutils_doc,
+  "This module provides access to math operations.\n"
+  "\n"
+  ".. note::\n"
+  "\n"
+  "   Classes, methods and attributes that accept vectors also accept other numeric sequences,\n"
+  "   such as tuples, lists.\n"
+  "\n"
+  "The :mod:`mathutils` module provides the following classes:\n"
+  "\n"
+  "- :class:`Color`,\n"
+  "- :class:`Euler`,\n"
+  "- :class:`Matrix`,\n"
+  "- :class:`Quaternion`,\n"
+  "- :class:`Vector`,\n");
+static int mathutils_array_parse_fast(float* array,
+  int size,
+  PyObject* value_fast,
+  const char* error_prefix)
 {
-  PyObject *item;
-  PyObject **value_fast_items = PySequence_Fast_ITEMS(value_fast);
+  PyObject* item;
+  PyObject** value_fast_items = PySequence_Fast_ITEMS(value_fast);
 
   int i;
 
@@ -48,13 +48,13 @@ static int mathutils_array_parse_fast(float *array,
   do {
     i--;
     if (((array[i] = PyFloat_AsDouble((item = value_fast_items[i]))) == -1.0f) &&
-        PyErr_Occurred()) {
+      PyErr_Occurred()) {
       PyErr_Format(PyExc_TypeError,
-                   "%.200s: sequence index %d expected a number, "
-                   "found '%.200s' type, ",
-                   error_prefix,
-                   i,
-                   Py_TYPE(item)->tp_name);
+        "%.200s: sequence index %d expected a number, "
+        "found '%.200s' type, ",
+        error_prefix,
+        i,
+        Py_TYPE(item)->tp_name);
       size = -1;
       break;
     }
@@ -63,7 +63,7 @@ static int mathutils_array_parse_fast(float *array,
   return size;
 }
 
-Py_hash_t mathutils_array_hash(const float *array, size_t array_len)
+Py_hash_t mathutils_array_hash(const float* array, size_t array_len)
 {
   int i;
   Py_uhash_t x; /* Unsigned for defined overflow behavior. */
@@ -92,7 +92,7 @@ Py_hash_t mathutils_array_hash(const float *array, size_t array_len)
 }
 
 int mathutils_array_parse(
-    float *array, int array_num_min, int array_num_max, PyObject *value, const char *error_prefix)
+  float* array, int array_num_min, int array_num_max, PyObject* value, const char* error_prefix)
 {
   const uint flag = array_num_max;
   int num;
@@ -101,10 +101,10 @@ int mathutils_array_parse(
 
 #if 1 /* approx 6x speedup for mathutils types */
 
-  if ((num = VectorObject_Check(value) ? ((VectorObject *)value)->vec_num : 0) ||
-      (num = EulerObject_Check(value) ? 3 : 0) || (num = QuaternionObject_Check(value) ? 4 : 0) ||
-      (num = ColorObject_Check(value) ? 3 : 0)) {
-    if (BaseMath_ReadCallback((BaseMathObject *)value) == -1) {
+  if ((num = VectorObject_Check(value) ? ((VectorObject*)value)->vec_num : 0) ||
+    (num = EulerObject_Check(value) ? 3 : 0) || (num = QuaternionObject_Check(value) ? 4 : 0) ||
+    (num = ColorObject_Check(value) ? 3 : 0)) {
+    if (BaseMath_ReadCallback((BaseMathObject*)value) == -1) {
       return -1;
     }
 
@@ -115,28 +115,28 @@ int mathutils_array_parse(
     if (num > array_num_max || num < array_num_min) {
       if (array_num_max == array_num_min) {
         PyErr_Format(PyExc_ValueError,
-                     "%.200s: sequence length is %d, expected %d",
-                     error_prefix,
-                     num,
-                     array_num_max);
+          "%.200s: sequence length is %d, expected %d",
+          error_prefix,
+          num,
+          array_num_max);
       }
       else {
         PyErr_Format(PyExc_ValueError,
-                     "%.200s: sequence length is %d, expected [%d - %d]",
-                     error_prefix,
-                     num,
-                     array_num_min,
-                     array_num_max);
+          "%.200s: sequence length is %d, expected [%d - %d]",
+          error_prefix,
+          num,
+          array_num_min,
+          array_num_max);
       }
       return -1;
     }
 
-    memcpy(array, ((const BaseMathObject *)value)->data, num * sizeof(float));
+    memcpy(array, ((const BaseMathObject*)value)->data, num * sizeof(float));
   }
   else
 #endif
   {
-    PyObject *value_fast = NULL;
+    PyObject* value_fast = NULL;
 
     /* non list/tuple cases */
     if (!(value_fast = PySequence_Fast(value, error_prefix))) {
@@ -153,18 +153,18 @@ int mathutils_array_parse(
     if (num > array_num_max || num < array_num_min) {
       if (array_num_max == array_num_min) {
         PyErr_Format(PyExc_ValueError,
-                     "%.200s: sequence length is %d, expected %d",
-                     error_prefix,
-                     num,
-                     array_num_max);
+          "%.200s: sequence length is %d, expected %d",
+          error_prefix,
+          num,
+          array_num_max);
       }
       else {
         PyErr_Format(PyExc_ValueError,
-                     "%.200s: sequence length is %d, expected [%d - %d]",
-                     error_prefix,
-                     num,
-                     array_num_min,
-                     array_num_max);
+          "%.200s: sequence length is %d, expected [%d - %d]",
+          error_prefix,
+          num,
+          array_num_min,
+          array_num_max);
       }
       Py_DECREF(value_fast);
       return -1;
@@ -186,39 +186,39 @@ int mathutils_array_parse(
   return num;
 }
 
-int mathutils_array_parse_alloc(float **array,
-                                int array_num,
-                                PyObject *value,
-                                const char *error_prefix)
+int mathutils_array_parse_alloc(float** array,
+  int array_num,
+  PyObject* value,
+  const char* error_prefix)
 {
   int num;
 
 #if 1 /* approx 6x speedup for mathutils types */
 
-  if ((num = VectorObject_Check(value) ? ((VectorObject *)value)->vec_num : 0) ||
-      (num = EulerObject_Check(value) ? 3 : 0) || (num = QuaternionObject_Check(value) ? 4 : 0) ||
-      (num = ColorObject_Check(value) ? 3 : 0)) {
-    if (BaseMath_ReadCallback((BaseMathObject *)value) == -1) {
+  if ((num = VectorObject_Check(value) ? ((VectorObject*)value)->vec_num : 0) ||
+    (num = EulerObject_Check(value) ? 3 : 0) || (num = QuaternionObject_Check(value) ? 4 : 0) ||
+    (num = ColorObject_Check(value) ? 3 : 0)) {
+    if (BaseMath_ReadCallback((BaseMathObject*)value) == -1) {
       return -1;
     }
 
     if (num < array_num) {
       PyErr_Format(PyExc_ValueError,
-                   "%.200s: sequence size is %d, expected > %d",
-                   error_prefix,
-                   num,
-                   array_num);
+        "%.200s: sequence size is %d, expected > %d",
+        error_prefix,
+        num,
+        array_num);
       return -1;
     }
 
     *array = PyMem_Malloc(num * sizeof(float));
-    memcpy(*array, ((const BaseMathObject *)value)->data, num * sizeof(float));
+    memcpy(*array, ((const BaseMathObject*)value)->data, num * sizeof(float));
     return num;
   }
 
 #endif
 
-  PyObject *value_fast = NULL;
+  PyObject* value_fast = NULL;
   // *array = NULL;
   int ret;
 
@@ -233,10 +233,10 @@ int mathutils_array_parse_alloc(float **array,
   if (num < array_num) {
     Py_DECREF(value_fast);
     PyErr_Format(PyExc_ValueError,
-                 "%.200s: sequence size is %d, expected > %d",
-                 error_prefix,
-                 num,
-                 array_num);
+      "%.200s: sequence size is %d, expected > %d",
+      error_prefix,
+      num,
+      array_num);
     return -1;
   }
 
@@ -252,12 +252,12 @@ int mathutils_array_parse_alloc(float **array,
   return ret;
 }
 
-int mathutils_array_parse_alloc_v(float **array,
-                                  int array_dim,
-                                  PyObject *value,
-                                  const char *error_prefix)
+int mathutils_array_parse_alloc_v(float** array,
+  int array_dim,
+  PyObject* value,
+  const char* error_prefix)
 {
-  PyObject *value_fast;
+  PyObject* value_fast;
   const int array_dim_flag = array_dim;
   int i, num;
 
@@ -270,15 +270,15 @@ int mathutils_array_parse_alloc_v(float **array,
   num = PySequence_Fast_GET_SIZE(value_fast);
 
   if (num != 0) {
-    PyObject **value_fast_items = PySequence_Fast_ITEMS(value_fast);
-    float *fp;
+    PyObject** value_fast_items = PySequence_Fast_ITEMS(value_fast);
+    float* fp;
 
     array_dim &= ~MU_ARRAY_FLAGS;
 
     fp = *array = PyMem_Malloc(num * array_dim * sizeof(float));
 
     for (i = 0; i < num; i++, fp += array_dim) {
-      PyObject *item = value_fast_items[i];
+      PyObject* item = value_fast_items[i];
 
       if (mathutils_array_parse(fp, array_dim, array_dim_flag, item, error_prefix) == -1) {
         PyMem_Free(*array);
@@ -293,10 +293,10 @@ int mathutils_array_parse_alloc_v(float **array,
   return num;
 }
 
-int mathutils_int_array_parse(int *array, int array_dim, PyObject *value, const char *error_prefix)
+int mathutils_int_array_parse(int* array, int array_dim, PyObject* value, const char* error_prefix)
 {
   int size, i;
-  PyObject *value_fast, **value_fast_items, *item;
+  PyObject* value_fast, ** value_fast_items, * item;
 
   if (!(value_fast = PySequence_Fast(value, error_prefix))) {
     /* PySequence_Fast sets the error */
@@ -305,10 +305,10 @@ int mathutils_int_array_parse(int *array, int array_dim, PyObject *value, const 
 
   if ((size = PySequence_Fast_GET_SIZE(value_fast)) != array_dim) {
     PyErr_Format(PyExc_ValueError,
-                 "%.200s: sequence size is %d, expected %d",
-                 error_prefix,
-                 size,
-                 array_dim);
+      "%.200s: sequence size is %d, expected %d",
+      error_prefix,
+      size,
+      array_dim);
     Py_DECREF(value_fast);
     return -1;
   }
@@ -328,12 +328,12 @@ int mathutils_int_array_parse(int *array, int array_dim, PyObject *value, const 
   return size;
 }
 
-int mathutils_array_parse_alloc_vi(int **array,
-                                   int array_dim,
-                                   PyObject *value,
-                                   const char *error_prefix)
+int mathutils_array_parse_alloc_vi(int** array,
+  int array_dim,
+  PyObject* value,
+  const char* error_prefix)
 {
-  PyObject *value_fast;
+  PyObject* value_fast;
   int i, size;
 
   if (!(value_fast = PySequence_Fast(value, error_prefix))) {
@@ -344,13 +344,13 @@ int mathutils_array_parse_alloc_vi(int **array,
   size = PySequence_Fast_GET_SIZE(value_fast);
 
   if (size != 0) {
-    PyObject **value_fast_items = PySequence_Fast_ITEMS(value_fast);
-    int *ip;
+    PyObject** value_fast_items = PySequence_Fast_ITEMS(value_fast);
+    int* ip;
 
     ip = *array = PyMem_Malloc(size * array_dim * sizeof(int));
 
     for (i = 0; i < size; i++, ip += array_dim) {
-      PyObject *item = value_fast_items[i];
+      PyObject* item = value_fast_items[i];
 
       if (mathutils_int_array_parse(ip, array_dim, item, error_prefix) == -1) {
         PyMem_Free(*array);
@@ -366,11 +366,11 @@ int mathutils_array_parse_alloc_vi(int **array,
 }
 
 int mathutils_array_parse_alloc_viseq(
-    int **array, int **start_table, int **len_table, PyObject *value, const char *error_prefix)
+  int** array, int** start_table, int** len_table, PyObject* value, const char* error_prefix)
 {
-  PyObject *value_fast, *subseq;
+  PyObject* value_fast, * subseq;
   int i, size, start, subseq_len;
-  int *ip;
+  int* ip;
 
   *array = NULL;
   *start_table = NULL;
@@ -383,7 +383,7 @@ int mathutils_array_parse_alloc_viseq(
   size = PySequence_Fast_GET_SIZE(value_fast);
 
   if (size != 0) {
-    PyObject **value_fast_items = PySequence_Fast_ITEMS(value_fast);
+    PyObject** value_fast_items = PySequence_Fast_ITEMS(value_fast);
 
     *start_table = PyMem_Malloc(size * sizeof(int));
     *len_table = PyMem_Malloc(size * sizeof(int));
@@ -394,7 +394,7 @@ int mathutils_array_parse_alloc_viseq(
       subseq = value_fast_items[i];
       if ((subseq_len = (int)PySequence_Size(subseq)) == -1) {
         PyErr_Format(
-            PyExc_ValueError, "%.200s: sequence expected to have subsequences", error_prefix);
+          PyExc_ValueError, "%.200s: sequence expected to have subsequences", error_prefix);
         PyMem_Free(*start_table);
         PyMem_Free(*len_table);
         Py_DECREF(value_fast);
@@ -432,46 +432,46 @@ int mathutils_array_parse_alloc_viseq(
   return size;
 }
 
-int mathutils_any_to_rotmat(float rmat[3][3], PyObject *value, const char *error_prefix)
+int mathutils_any_to_rotmat(float rmat[3][3], PyObject* value, const char* error_prefix)
 {
   if (EulerObject_Check(value)) {
-    if (BaseMath_ReadCallback((BaseMathObject *)value) == -1) {
+    if (BaseMath_ReadCallback((BaseMathObject*)value) == -1) {
       return -1;
     }
 
-    eulO_to_mat3(rmat, ((const EulerObject *)value)->eul, ((const EulerObject *)value)->order);
+    eulO_to_mat3(rmat, ((const EulerObject*)value)->eul, ((const EulerObject*)value)->order);
     return 0;
   }
   if (QuaternionObject_Check(value)) {
-    if (BaseMath_ReadCallback((BaseMathObject *)value) == -1) {
+    if (BaseMath_ReadCallback((BaseMathObject*)value) == -1) {
       return -1;
     }
 
     float tquat[4];
-    normalize_qt_qt(tquat, ((const QuaternionObject *)value)->quat);
+    normalize_qt_qt(tquat, ((const QuaternionObject*)value)->quat);
     quat_to_mat3(rmat, tquat);
     return 0;
   }
   if (MatrixObject_Check(value)) {
-    if (BaseMath_ReadCallback((BaseMathObject *)value) == -1) {
+    if (BaseMath_ReadCallback((BaseMathObject*)value) == -1) {
       return -1;
     }
-    if (((MatrixObject *)value)->row_num < 3 || ((MatrixObject *)value)->col_num < 3) {
+    if (((MatrixObject*)value)->row_num < 3 || ((MatrixObject*)value)->col_num < 3) {
       PyErr_Format(
-          PyExc_ValueError, "%.200s: matrix must have minimum 3x3 dimensions", error_prefix);
+        PyExc_ValueError, "%.200s: matrix must have minimum 3x3 dimensions", error_prefix);
       return -1;
     }
 
-    matrix_as_3x3(rmat, (MatrixObject *)value);
+    matrix_as_3x3(rmat, (MatrixObject*)value);
     normalize_m3(rmat);
     return 0;
   }
 
   PyErr_Format(PyExc_TypeError,
-               "%.200s: expected a Euler, Quaternion or Matrix type, "
-               "found %.200s",
-               error_prefix,
-               Py_TYPE(value)->tp_name);
+    "%.200s: expected a Euler, Quaternion or Matrix type, "
+    "found %.200s",
+    error_prefix,
+    Py_TYPE(value)->tp_name);
   return -1;
 }
 
@@ -498,8 +498,8 @@ int EXPP_FloatsAreEqual(float af, float bf, int maxDiff)
 {
   /* solid, fast routine across all platforms
    * with constant time behavior */
-  const int ai = *(const int *)(&af);
-  const int bi = *(const int *)(&bf);
+  const int ai = *(const int*)(&af);
+  const int bi = *(const int*)(&bf);
   const int test = SIGNMASK(ai ^ bi);
   int diff, v1, v2;
 
@@ -512,7 +512,7 @@ int EXPP_FloatsAreEqual(float af, float bf, int maxDiff)
 
 /*---------------------- EXPP_VectorsAreEqual -------------------------
  * Builds on EXPP_FloatsAreEqual to test vectors */
-int EXPP_VectorsAreEqual(const float *vecA, const float *vecB, int size, int floatSteps)
+int EXPP_VectorsAreEqual(const float* vecA, const float* vecB, int size, int floatSteps)
 {
   int x;
   for (x = 0; x < size; x++) {
@@ -524,11 +524,11 @@ int EXPP_VectorsAreEqual(const float *vecA, const float *vecB, int size, int flo
 }
 
 #ifndef MATH_STANDALONE
-PyObject *mathutils_dynstr_to_py(struct DynStr *ds)
+PyObject* mathutils_dynstr_to_py(struct DynStr* ds)
 {
   const int ds_len = BLI_dynstr_get_len(ds); /* space for \0 */
-  char *ds_buf = PyMem_Malloc(ds_len + 1);
-  PyObject *ret;
+  char* ds_buf = PyMem_Malloc(ds_len + 1);
+  PyObject* ret;
   BLI_dynstr_get_cstring_ex(ds, ds_buf);
   BLI_dynstr_free(ds);
   ret = PyUnicode_FromStringAndSize(ds_buf, ds_len);
@@ -542,9 +542,9 @@ PyObject *mathutils_dynstr_to_py(struct DynStr *ds)
 /* For mathutils internal use only,
  * eventually should re-alloc but to start with we only have a few users. */
 #define MATHUTILS_TOT_CB 17
-static Mathutils_Callback *mathutils_callbacks[MATHUTILS_TOT_CB] = {NULL};
+static Mathutils_Callback* mathutils_callbacks[MATHUTILS_TOT_CB] = { NULL };
 
-uchar Mathutils_RegisterCallback(Mathutils_Callback *cb)
+uchar Mathutils_RegisterCallback(Mathutils_Callback* cb)
 {
   uchar i;
 
@@ -562,9 +562,9 @@ uchar Mathutils_RegisterCallback(Mathutils_Callback *cb)
   return i;
 }
 
-int _BaseMathObject_CheckCallback(BaseMathObject *self)
+int _BaseMathObject_CheckCallback(BaseMathObject* self)
 {
-  Mathutils_Callback *cb = mathutils_callbacks[self->cb_type];
+  Mathutils_Callback* cb = mathutils_callbacks[self->cb_type];
   if (LIKELY(cb->check(self) != -1)) {
     return 0;
   }
@@ -572,9 +572,9 @@ int _BaseMathObject_CheckCallback(BaseMathObject *self)
 }
 
 /* use macros to check for NULL */
-int _BaseMathObject_ReadCallback(BaseMathObject *self)
+int _BaseMathObject_ReadCallback(BaseMathObject* self)
 {
-  Mathutils_Callback *cb = mathutils_callbacks[self->cb_type];
+  Mathutils_Callback* cb = mathutils_callbacks[self->cb_type];
   if (LIKELY(cb->get(self, self->cb_subtype) != -1)) {
     return 0;
   }
@@ -585,9 +585,9 @@ int _BaseMathObject_ReadCallback(BaseMathObject *self)
   return -1;
 }
 
-int _BaseMathObject_WriteCallback(BaseMathObject *self)
+int _BaseMathObject_WriteCallback(BaseMathObject* self)
 {
-  Mathutils_Callback *cb = mathutils_callbacks[self->cb_type];
+  Mathutils_Callback* cb = mathutils_callbacks[self->cb_type];
   if (LIKELY(cb->set(self, self->cb_subtype) != -1)) {
     return 0;
   }
@@ -598,83 +598,83 @@ int _BaseMathObject_WriteCallback(BaseMathObject *self)
   return -1;
 }
 
-int _BaseMathObject_ReadIndexCallback(BaseMathObject *self, int index)
+int _BaseMathObject_ReadIndexCallback(BaseMathObject* self, int index)
 {
-  Mathutils_Callback *cb = mathutils_callbacks[self->cb_type];
+  Mathutils_Callback* cb = mathutils_callbacks[self->cb_type];
   if (LIKELY(cb->get_index(self, self->cb_subtype, index) != -1)) {
     return 0;
   }
 
   if (!PyErr_Occurred()) {
     PyErr_Format(
-        PyExc_RuntimeError, "%s read index, user has become invalid", Py_TYPE(self)->tp_name);
+      PyExc_RuntimeError, "%s read index, user has become invalid", Py_TYPE(self)->tp_name);
   }
   return -1;
 }
 
-int _BaseMathObject_WriteIndexCallback(BaseMathObject *self, int index)
+int _BaseMathObject_WriteIndexCallback(BaseMathObject* self, int index)
 {
-  Mathutils_Callback *cb = mathutils_callbacks[self->cb_type];
+  Mathutils_Callback* cb = mathutils_callbacks[self->cb_type];
   if (LIKELY(cb->set_index(self, self->cb_subtype, index) != -1)) {
     return 0;
   }
 
   if (!PyErr_Occurred()) {
     PyErr_Format(
-        PyExc_RuntimeError, "%s write index, user has become invalid", Py_TYPE(self)->tp_name);
+      PyExc_RuntimeError, "%s write index, user has become invalid", Py_TYPE(self)->tp_name);
   }
   return -1;
 }
 
-void _BaseMathObject_RaiseFrozenExc(const BaseMathObject *self)
+void _BaseMathObject_RaiseFrozenExc(const BaseMathObject* self)
 {
   PyErr_Format(PyExc_TypeError, "%s is frozen (immutable)", Py_TYPE(self)->tp_name);
 }
 
-void _BaseMathObject_RaiseNotFrozenExc(const BaseMathObject *self)
+void _BaseMathObject_RaiseNotFrozenExc(const BaseMathObject* self)
 {
   PyErr_Format(
-      PyExc_TypeError, "%s is not frozen (mutable), call freeze first", Py_TYPE(self)->tp_name);
+    PyExc_TypeError, "%s is not frozen (mutable), call freeze first", Py_TYPE(self)->tp_name);
 }
 
 /* BaseMathObject generic functions for all mathutils types */
 char BaseMathObject_owner_doc[] = "The item this is wrapping or None  (read-only).";
-PyObject *BaseMathObject_owner_get(BaseMathObject *self, void *UNUSED(closure))
+PyObject* BaseMathObject_owner_get(BaseMathObject* self, void* UNUSED(closure))
 {
-  PyObject *ret = self->cb_user ? self->cb_user : Py_None;
+  PyObject* ret = self->cb_user ? self->cb_user : Py_None;
   return Py_INCREF_RET(ret);
 }
 
 char BaseMathObject_is_wrapped_doc[] =
-    "True when this object wraps external data (read-only).\n\n:type: boolean";
-PyObject *BaseMathObject_is_wrapped_get(BaseMathObject *self, void *UNUSED(closure))
+"True when this object wraps external data (read-only).\n\n:type: boolean";
+PyObject* BaseMathObject_is_wrapped_get(BaseMathObject* self, void* UNUSED(closure))
 {
   return PyBool_FromLong((self->flag & BASE_MATH_FLAG_IS_WRAP) != 0);
 }
 
 char BaseMathObject_is_frozen_doc[] =
-    "True when this object has been frozen (read-only).\n\n:type: boolean";
-PyObject *BaseMathObject_is_frozen_get(BaseMathObject *self, void *UNUSED(closure))
+"True when this object has been frozen (read-only).\n\n:type: boolean";
+PyObject* BaseMathObject_is_frozen_get(BaseMathObject* self, void* UNUSED(closure))
 {
   return PyBool_FromLong((self->flag & BASE_MATH_FLAG_IS_FROZEN) != 0);
 }
 
 char BaseMathObject_is_valid_doc[] =
-    "True when the owner of this data is valid.\n\n:type: boolean";
-PyObject *BaseMathObject_is_valid_get(BaseMathObject *self, void *UNUSED(closure))
+"True when the owner of this data is valid.\n\n:type: boolean";
+PyObject* BaseMathObject_is_valid_get(BaseMathObject* self, void* UNUSED(closure))
 {
   return PyBool_FromLong(BaseMath_CheckCallback(self) == 0);
 }
 
 char BaseMathObject_freeze_doc[] =
-    ".. function:: freeze()\n"
-    "\n"
-    "   Make this object immutable.\n"
-    "\n"
-    "   After this the object can be hashed, used in dictionaries & sets.\n"
-    "\n"
-    "   :return: An instance of this object.\n";
-PyObject *BaseMathObject_freeze(BaseMathObject *self)
+".. function:: freeze()\n"
+"\n"
+"   Make this object immutable.\n"
+"\n"
+"   After this the object can be hashed, used in dictionaries & sets.\n"
+"\n"
+"   :return: An instance of this object.\n";
+PyObject* BaseMathObject_freeze(BaseMathObject* self)
 {
   if ((self->flag & BASE_MATH_FLAG_IS_WRAP) || (self->cb_user != NULL)) {
     PyErr_SetString(PyExc_TypeError, "Cannot freeze wrapped/owned data");
@@ -683,22 +683,22 @@ PyObject *BaseMathObject_freeze(BaseMathObject *self)
 
   self->flag |= BASE_MATH_FLAG_IS_FROZEN;
 
-  return Py_INCREF_RET((PyObject *)self);
+  return Py_INCREF_RET((PyObject*)self);
 }
 
-int BaseMathObject_traverse(BaseMathObject *self, visitproc visit, void *arg)
+int BaseMathObject_traverse(BaseMathObject* self, visitproc visit, void* arg)
 {
   Py_VISIT(self->cb_user);
   return 0;
 }
 
-int BaseMathObject_clear(BaseMathObject *self)
+int BaseMathObject_clear(BaseMathObject* self)
 {
   Py_CLEAR(self->cb_user);
   return 0;
 }
 
-void BaseMathObject_dealloc(BaseMathObject *self)
+void BaseMathObject_dealloc(BaseMathObject* self)
 {
   /* only free non wrapped */
   if ((self->flag & BASE_MATH_FLAG_IS_WRAP) == 0) {
@@ -741,9 +741,9 @@ static struct PyModuleDef M_Mathutils_module_def = {
 
 PyMODINIT_FUNC PyInit_mathutils(void)
 {
-  PyObject *mod;
-  PyObject *submodule;
-  PyObject *sys_modules = PyImport_GetModuleDict();
+  PyObject* mod;
+  PyObject* submodule;
+  PyObject* sys_modules = PyImport_GetModuleDict();
 
   if (PyType_Ready(&vector_Type) < 0) {
     return NULL;
@@ -767,11 +767,11 @@ PyMODINIT_FUNC PyInit_mathutils(void)
   mod = PyModule_Create(&M_Mathutils_module_def);
 
   /* each type has its own new() function */
-  // PyModule_AddType(mod, &vector_Type);
-  // PyModule_AddType(mod, &matrix_Type);
-  // PyModule_AddType(mod, &euler_Type);
-  // PyModule_AddType(mod, &quaternion_Type);
-  // PyModule_AddType(mod, &color_Type);
+  PyModule_AddObject(mod, "Vector", &vector_Type);
+  PyModule_AddObject(mod, "Matrix", &matrix_Type);
+  PyModule_AddObject(mod, "Euler", &euler_Type);
+  PyModule_AddObject(mod, "Quaternion", &quaternion_Type);
+  PyModule_AddObject(mod, "Color", &color_Type);
 
   /* submodule */
   PyModule_AddObject(mod, "geometry", (submodule = PyInit_mathutils_geometry()));
@@ -803,7 +803,7 @@ PyMODINIT_FUNC PyInit_mathutils(void)
   mathutils_matrix_row_cb_index = Mathutils_RegisterCallback(&mathutils_matrix_row_cb);
   mathutils_matrix_col_cb_index = Mathutils_RegisterCallback(&mathutils_matrix_col_cb);
   mathutils_matrix_translation_cb_index = Mathutils_RegisterCallback(
-      &mathutils_matrix_translation_cb);
+    &mathutils_matrix_translation_cb);
 
   return mod;
 }
